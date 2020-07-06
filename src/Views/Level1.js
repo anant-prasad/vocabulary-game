@@ -4,7 +4,7 @@ import { level1 } from "../datas";
 
 export default class Level1 extends Component {
   state = {
-    value: "",
+    value: " ",
     timeOut: "false",
     round: 0,
     timer: 10,
@@ -12,15 +12,17 @@ export default class Level1 extends Component {
     wrongAnswer: "",
     wrongAnswers: [],
   };
-
   componentDidMount() {
-    this.randomTense();
     this.startTimeOut();
+    this.randomTense();
+
+    // console.log("hello");
   }
 
   startTimeOut = () => {
     this.timeOut = setTimeout(() => {
       this.setState({ timeOut: true });
+      console.log("timeout");
     }, 10000);
 
     this.interval = setInterval(() => {
@@ -47,6 +49,12 @@ export default class Level1 extends Component {
     this.setState({ randomTense });
   };
 
+  handleRestart = () => {
+    this.setState({ timer: 10, timeOut: false, wrongAnswer: "" });
+
+    this.startTimeOut();
+  };
+
   render() {
     return (
       <div
@@ -59,7 +67,7 @@ export default class Level1 extends Component {
         }}
       >
         <h1>Vocabulary Game</h1>
-        <Progress percent={50} status="active" />
+        <Progress successPercent={50} status="active" />
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h2>Level 1</h2>
           <h2>1/5</h2>
@@ -81,12 +89,27 @@ export default class Level1 extends Component {
         </form>
 
         <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <Button>5</Button>
-          <Button>4</Button>
-          <Button>3</Button>
-          <Button>2</Button>
-          <Button>1</Button>
-          <Button>Click to restart !</Button>
+          <Button className={`${this.state.timer <= 8 && "disabled"}`}>
+            5
+          </Button>
+          <Button className={`${this.state.timer <= 6 && "disabled"}`}>
+            4
+          </Button>
+          <Button className={`${this.state.timer <= 4 && "disabled"}`}>
+            3
+          </Button>
+          <Button className={`${this.state.timer <= 2 && "disabled"}`}>
+            2
+          </Button>
+          <Button className={`${this.state.timer <= 0 && "disabled"}`}>
+            1
+          </Button>
+          <Button
+            onClick={this.handleRestart}
+            style={{ display: this.state.timeOut ? "block" : "none" }}
+          >
+            Click to restart !
+          </Button>
         </div>
 
         <Divider />
