@@ -56,6 +56,62 @@ export default class Level1 extends Component {
     this.startTimeOut();
   };
 
+  handleChange = (e) => {
+    this.setState({ value: e.target.value });
+  };
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (this.state.timeOut)
+      return alert("Please click restart to keep playing");
+
+    if (!this.state.value.trim()) return alert("Please type something...");
+
+    this.setState({ value: "", wrongAnswer: "" });
+
+    this.checkMatched();
+  };
+
+  checkMatched = () => {
+    (this.state.randomTense === "simple"
+      ? level1[this.state.round].simple
+      : level1[this.state.round].past) === this.state.value
+      ? this.setState(
+          { round: this.round + 1, timer: 10, wrongAnswer: "" },
+          () => {
+            this.randomTense();
+
+            clearTimeout(this.timeOut);
+            this.timeOut = setTimeout(() => {
+              this.setState({ timeOut: true });
+            }, 10000);
+          }
+        )
+      : this.setState(
+          {
+            wrongAnswer:
+              this.state.randomTense === "simple"
+                ? `${level1[this.state.round].simple}`
+                : `${level1[this.state.round].past}`,
+          },
+          () => {
+            this.setState({
+              round: this.state.round + 1,
+              timer: 10,
+              wrongAnswers: this.state.wrongAnswers.concat(
+                level1[this.state.round].voca
+              ),
+            });
+            this.randomTense();
+            clearTimeout(this.timeOut);
+            this.timeOut = setTimeout(() => {
+              this.setState({ timeOut: true });
+            }, 10000);
+          }
+        );
+  };
+
   render() {
     return (
       <div
@@ -80,10 +136,16 @@ export default class Level1 extends Component {
           Answer the voca's{" "}
           <span style={{ color: "red" }}>past participle</span>
         </div>
-        <form style={{ padding: "1rem 0" }}>
+        <form style={{ padding: "1rem 0" }} onSubmit={this.handleSubmit}>
           <div style={{ display: "flex" }}>
-            <Input name="value" onChange value id="voca" type="text" />
-            <Button className type="submit">
+            <Input
+              name="value"
+              onChange={this.handleChange}
+              value={this.state.value}
+              id="voca"
+              type="text"
+            />
+            <Button className type="submit" onClick={this.handleSubmit}>
               Submit
             </Button>
           </div>
