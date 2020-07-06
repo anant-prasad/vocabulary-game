@@ -5,7 +5,7 @@ import { level1 } from "../datas";
 export default class Level1 extends Component {
   state = {
     value: " ",
-    timeOut: "false",
+    timeOut: false,
     round: 0,
     timer: 10,
     randomTense: "",
@@ -13,8 +13,8 @@ export default class Level1 extends Component {
     wrongAnswers: [],
   };
   componentDidMount() {
-    this.startTimeOut();
     this.randomTense();
+    this.startTimeOut();
 
     // console.log("hello");
   }
@@ -22,11 +22,12 @@ export default class Level1 extends Component {
   startTimeOut = () => {
     this.timeOut = setTimeout(() => {
       this.setState({ timeOut: true });
-      console.log("timeout");
+      // console.log("timeout");
     }, 10000);
 
     this.interval = setInterval(() => {
       this.setState({ timer: this.state.timer - 1 });
+      // console.log("interval", this.state.timer);
     }, 1000);
   };
 
@@ -89,21 +90,12 @@ export default class Level1 extends Component {
         </form>
 
         <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <Button className={`${this.state.timer <= 8 && "disabled"}`}>
-            5
-          </Button>
-          <Button className={`${this.state.timer <= 6 && "disabled"}`}>
-            4
-          </Button>
-          <Button className={`${this.state.timer <= 4 && "disabled"}`}>
-            3
-          </Button>
-          <Button className={`${this.state.timer <= 2 && "disabled"}`}>
-            2
-          </Button>
-          <Button className={`${this.state.timer <= 0 && "disabled"}`}>
-            1
-          </Button>
+          {/* {this.state.timer} */}
+          <Button>5</Button>
+          <Button>4</Button>
+          <Button>3</Button>
+          <Button>2</Button>
+          <Button>1</Button>
           <Button
             onClick={this.handleRestart}
             style={{ display: this.state.timeOut ? "block" : "none" }}
