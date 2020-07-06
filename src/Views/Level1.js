@@ -188,7 +188,7 @@ export default class Level1 extends Component {
               <>
                 <Divider />
 
-                <h3>Wrong! Correct answer</h3>
+                <h3>{this.state.wrongAnswer}</h3>
                 <div>
                   <li style={{ display: "block" }}>
                     <p>icon {this.state.wrongAnswer}</p>
