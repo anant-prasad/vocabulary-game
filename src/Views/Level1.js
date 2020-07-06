@@ -3,6 +3,50 @@ import { Input, Button, Progress, Divider } from "antd";
 import { level1 } from "../datas";
 
 export default class Level1 extends Component {
+  state = {
+    value: "",
+    timeOut: "false",
+    round: 0,
+    timer: 10,
+    randomTense: "",
+    wrongAnswer: "",
+    wrongAnswers: [],
+  };
+
+  componentDidMount() {
+    this.randomTense();
+    this.startTimeOut();
+  }
+
+  startTimeOut = () => {
+    this.timeOut = setTimeout(() => {
+      this.setState({ timeOut: true });
+    }, 10000);
+
+    this.interval = setInterval(() => {
+      this.setState({ timer: this.state.timer - 1 });
+    }, 1000);
+  };
+
+  componentDidUpdate() {
+    if (this.state.timer === 0) {
+      clearInterval(this.interval);
+    }
+  }
+  componentWillUnmount() {
+    clearTimeout(this.timeOut);
+    clearInterval(this.interval);
+  }
+
+  randomTense = async () => {
+    let TenseArray = ["simple", "past"];
+
+    let randomTense = await TenseArray[
+      Math.floor(Math.random() * TenseArray.length)
+    ];
+    this.setState({ randomTense });
+  };
+
   render() {
     return (
       <div
