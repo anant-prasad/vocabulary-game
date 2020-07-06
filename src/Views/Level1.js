@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Input, Button, Progress, Divider } from "antd";
 import { level1 } from "../datas";
+import { Link } from "react-router-dom";
 
 export default class Level1 extends Component {
   state = {
@@ -112,6 +113,12 @@ export default class Level1 extends Component {
         );
   };
 
+  handleRedirect = () => {
+    setTimeout(() => {
+      window.location.reload();
+    }, 10);
+  };
+
   render() {
     return (
       <div
@@ -123,71 +130,94 @@ export default class Level1 extends Component {
           margin: "3rem auto",
         }}
       >
-        <h1>Vocabulary Game</h1>
-        <Progress successPercent={50} status="active" />
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <h2>Level 1</h2>
-          <h2>1/5</h2>
-        </div>
-
-        <span style={{ marginBottom: 0, color: "grey" }}>Infinitive</span>
-        <h2>Voca</h2>
-        <div style={{ fontSize: "1rem" }}>
-          Answer the voca's{" "}
-          <span style={{ color: "red" }}>past participle</span>
-        </div>
-        <form style={{ padding: "1rem 0" }} onSubmit={this.handleSubmit}>
-          <div style={{ display: "flex" }}>
-            <Input
-              name="value"
-              onChange={this.handleChange}
-              value={this.state.value}
-              id="voca"
-              type="text"
+        {this.state.round < level1.length ? (
+          <>
+            <h1>Vocabulary Game</h1>
+            <Progress
+              successPercent={(this.state.round / level1.length) * 100}
+              status="active"
             />
-            <Button className type="submit" onClick={this.handleSubmit}>
-              Submit
-            </Button>
-          </div>
-        </form>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <h2>Level 1</h2>
+              <h2>
+                {this.state.round}/{level1.length}
+              </h2>
+            </div>
 
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          {/* {this.state.timer} */}
-          <Button>5</Button>
-          <Button>4</Button>
-          <Button>3</Button>
-          <Button>2</Button>
-          <Button>1</Button>
-          <Button
-            onClick={this.handleRestart}
-            style={{ display: this.state.timeOut ? "block" : "none" }}
-          >
-            Click to restart !
-          </Button>
-        </div>
+            <span style={{ marginBottom: 0, color: "grey" }}>Infinitive</span>
+            <h2>{level1[this.state.round].voca}</h2>
+            <div style={{ fontSize: "1rem" }}>
+              Answer the voca's{" "}
+              <span style={{ color: "red" }}>
+                {this.state.randomTense === "simple"
+                  ? "simple past"
+                  : "past participle"}
+              </span>
+            </div>
+            <form style={{ padding: "1rem 0" }} onSubmit={this.handleSubmit}>
+              <div style={{ display: "flex" }}>
+                <Input
+                  name="value"
+                  onChange={this.handleChange}
+                  value={this.state.value}
+                  id="voca"
+                  type="text"
+                />
+                <Button className type="submit" onClick={this.handleSubmit}>
+                  Submit
+                </Button>
+              </div>
+            </form>
 
-        <Divider />
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              {/* {this.state.timer} */}
+              <Button>5</Button>
+              <Button>4</Button>
+              <Button>3</Button>
+              <Button>2</Button>
+              <Button>1</Button>
+              <Button
+                onClick={this.handleRestart}
+                style={{ display: this.state.timeOut ? "block" : "none" }}
+              >
+                Click to restart !
+              </Button>
+            </div>
 
-        <h3>Wrong! Correct answer</h3>
-        <div>
-          <li style={{ display: "block" }}>
-            <p>icon answer</p>
-          </li>
-        </div>
+            {this.state.wrongAnswer && (
+              <>
+                <Divider />
 
-        <h1>Reviews the wrong answers</h1>
+                <h3>Wrong! Correct answer</h3>
+                <div>
+                  <li style={{ display: "block" }}>
+                    <p>icon {this.state.wrongAnswer}</p>
+                  </li>
+                </div>
+              </>
+            )}
+          </>
+        ) : (
+          <>
+            <h1>Reviews the wrong answers</h1>
+            {this.state.wrongAnswers.map((answer, index) => {
+              return (
+                <div>
+                  <ul>
+                    <li>{answer}</li>
+                  </ul>
+                </div>
+              );
+            })}
 
-        <div>
-          <ul>
-            <li>answer</li>
-            <li>answer</li>
-          </ul>
-        </div>
-
-        <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-          <Button>Retry</Button>
-          <Button>Level2</Button>
-        </div>
+            <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+              <Button onClick={this.handleRedirect}>Retry</Button>
+              <Button>
+                <Link to="/level2">Level2</Link>
+              </Button>
+            </div>
+          </>
+        )}
       </div>
     );
   }

@@ -6,4 +6,11 @@ export const level1 = [
     past: "burnt",
     mp3: "",
   },
+  {
+    id: "2",
+    voca: "be",
+    simple: "done",
+    past: "been",
+    mp3: "",
+  },
 ];
